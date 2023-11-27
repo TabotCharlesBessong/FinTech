@@ -29,7 +29,7 @@ const Settings = () => {
         }
         onClick={() => {}}
       />
-      <ListItem
+      {/* <ListItem
         label="Report a bug"
         detail={
           <Entypo
@@ -39,7 +39,7 @@ const Settings = () => {
           />
         }
         onClick={() => {}}
-      />
+      /> */}
       <ListItem
         label="Erese all data"
         onClick={() => {}}
