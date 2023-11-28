@@ -3,8 +3,10 @@ import React from "react";
 import { ListItem } from "../component";
 import { Entypo } from "@expo/vector-icons";
 import { theme } from "../them";
+// import { useNavigation } from "@react-navigation/native";
 
-const Settings = () => {
+const Settings = ({navigation}) => {
+  // const navigation = useNavigation()
   return (
     <View
       style={{
@@ -27,19 +29,8 @@ const Settings = () => {
             size={20}
           />
         }
-        onClick={() => {}}
+        onClick={() => {navigation.navigate('Categories')}}
       />
-      {/* <ListItem
-        label="Report a bug"
-        detail={
-          <Entypo
-            name="chevron-thin-right"
-            color={theme.colors.text}
-            size={20}
-          />
-        }
-        onClick={() => {}}
-      /> */}
       <ListItem
         label="Erese all data"
         onClick={() => {}}
