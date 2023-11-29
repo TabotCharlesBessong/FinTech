@@ -4,6 +4,7 @@ import {
   Button,
   KeyboardAvoidingView,
   Modal,
+  Platform,
   StyleSheet,
   TextInput,
   TouchableOpacity,
@@ -23,29 +24,46 @@ import { Category } from "../types/category";
 const Categories = () => {
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [colors, setColors] = useState(theme.colors.primary);
-  const [Categories, setCategories] = useState<Category[]>([
+  const [categories, setCategories] = useState<Category[]>([
     {
       color: theme.colors.primary,
       name: "Groceries",
-      id:'1'
+      id: "1",
     },
     {
       color: theme.colors.error,
       name: "Expenditure",
-      id:'2'
+      id: "2",
     },
     {
       color: theme.colors.card,
       name: "School fees and others",
-      id:'3'
+      id: "3",
     },
   ]);
+  const [newName, setNewName] = useState("");
   const onSelectColor = ({ hex }) => {
     setColors(hex);
   };
+
+  const createCategory = () => {
+    if(newName.length === 0) return
+    setCategories([
+      ...categories,
+      {
+        id: Math.random().toString(),
+        color: colors,
+        name: newName,
+      },
+    ]);
+    // console.log(categories);
+    setNewName('')
+    setColors(theme.colors.primary)
+  };
+
   return (
     <>
-      <KeyboardAvoidingView behavior="padding" style={{ margin: 15, flex: 1 }}>
+      <KeyboardAvoidingView style={{ margin: 15, flex: 1 }}>
         <View
           style={{
             flexDirection: "column",
@@ -58,8 +76,12 @@ const Categories = () => {
             paddingHorizontal: 11,
           }}
         >
-          {Categories.map((category) => (
-            <CategoryRow key={category.id} name={category.name} color={category.color} />
+          {categories.map((category) => (
+            <CategoryRow
+              key={category.id}
+              name={category.name}
+              color={category.color}
+            />
           ))}
         </View>
         <View style={{ flex: 1 }} />
@@ -95,6 +117,8 @@ const Categories = () => {
               paddingLeft: 8,
               marginRight: 12,
             }}
+            onChangeText={(value) => setNewName(value)}
+            value={newName}
           />
           <TouchableOpacity
             style={{
@@ -102,6 +126,7 @@ const Categories = () => {
               alignItems: "center",
               justifyContent: "center",
             }}
+            onPress={() => createCategory()}
           >
             <FontAwesome name="send" color={theme.colors.primary} size={30} />
           </TouchableOpacity>
