@@ -7,21 +7,45 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
-import ColorPicker, { HueSlider, OpacitySlider, Panel1, Preview, Swatches } from "reanimated-color-picker";
-import { ListItem } from "../component";
+import ColorPicker, {
+  HueSlider,
+  OpacitySlider,
+  Panel1,
+  Preview,
+  Swatches,
+} from "reanimated-color-picker";
+import { CategoryRow, ListItem } from "../component";
 import { theme } from "../them";
+import { Category } from "../types/category";
 
 const Categories = () => {
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [colors, setColors] = useState(theme.colors.primary);
+  const [Categories, setCategories] = useState<Category[]>([
+    {
+      color: theme.colors.primary,
+      name: "Groceries",
+      id:'1'
+    },
+    {
+      color: theme.colors.error,
+      name: "Expenditure",
+      id:'2'
+    },
+    {
+      color: theme.colors.card,
+      name: "School fees and others",
+      id:'3'
+    },
+  ]);
   const onSelectColor = ({ hex }) => {
     setColors(hex);
   };
   return (
     <>
-      <KeyboardAvoidingView style={{ margin: 15, flex: 1 }}>
+      <KeyboardAvoidingView behavior="padding" style={{ margin: 15, flex: 1 }}>
         <View
           style={{
             flexDirection: "column",
@@ -34,18 +58,9 @@ const Categories = () => {
             paddingHorizontal: 11,
           }}
         >
-          <ListItem
-            label="Category"
-            detail={
-              <Entypo
-                name="chevron-thin-right"
-                color={theme.colors.text}
-                size={20}
-              />
-            }
-            onClick={() => {}}
-          />
-          <ListItem label="Erese all data" onClick={() => {}} isDestructive />
+          {Categories.map((category) => (
+            <CategoryRow key={category.id} name={category.name} color={category.color} />
+          ))}
         </View>
         <View style={{ flex: 1 }} />
         <View
@@ -92,7 +107,7 @@ const Categories = () => {
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
-      <Modal visible={showColorPicker} animationType="slide" >
+      <Modal visible={showColorPicker} animationType="slide">
         <ColorPicker>
           <Preview />
           <Panel1 />
