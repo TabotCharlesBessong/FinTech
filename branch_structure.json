@@ -1,0 +1,33 @@
+{
+  "default_branch": "master",
+  "branches": [
+    "ai_financial_app",
+    "client_side",
+    "credit_scoring_app",
+    "improvement",
+    "master",
+    "server_side",
+    "server_side_fixes",
+    "system_design"
+  ],
+  "parent": {
+    "ai_financial_app": "master",
+    "client_side": "master",
+    "credit_scoring_app": "master",
+    "improvement": "master",
+    "master": null,
+    "server_side": "master",
+    "server_side_fixes": "master",
+    "system_design": "master"
+  },
+  "order": [
+    "master",
+    "ai_financial_app",
+    "client_side",
+    "credit_scoring_app",
+    "improvement",
+    "server_side",
+    "server_side_fixes",
+    "system_design"
+  ]
+}
