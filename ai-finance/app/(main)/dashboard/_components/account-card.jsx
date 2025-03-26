@@ -7,9 +7,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
-import useFetch from "@/hooks/use-fetch";
+} from "../../../../components/ui/card";
+import { Switch } from "../../../../components/ui/switch";
+import useFetch from "../../../../hooks/use-fetch";
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
