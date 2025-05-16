@@ -1,0 +1,103 @@
+@startuml Credit Score System Architecture
+
+!define RECTANGLE class
+
+skinparam componentStyle rectangle
+skinparam linetype ortho
+skinparam nodesep 80
+skinparam ranksep 100
+
+' Infrastructure Layer
+package "Infrastructure Layer" {
+    [Load Balancer] as LB
+    [CDN] as CDN
+    [API Gateway] as API
+    [Service Mesh] as Mesh
+}
+
+' Application Layer
+package "Application Layer" {
+    package "User Service" {
+        [User Management] as UM
+        [Authentication] as Auth
+        [Authorization] as Authz
+    }
+    
+    package "Transaction Service" {
+        [Transaction Management] as TM
+        [Category Management] as CM
+        [Transaction Analytics] as TA
+    }
+    
+    package "Credit Score Service" {
+        [Score Calculator] as SC
+        [Score History] as SH
+        [Recommendation Engine] as RE
+    }
+    
+    package "Analytics Service" {
+        [Dashboard Service] as DS
+        [Reporting Service] as RS
+        [Notification Service] as NS
+    }
+}
+
+' Data Layer
+package "Data Layer" {
+    database "User Database" as UDB
+    database "Transaction Database" as TDB
+    database "Analytics Database" as ADB
+    database "Cache" as Cache
+}
+
+' External Services
+package "External Services" {
+    [Email Service] as Email
+    [SMS Service] as SMS
+    [Banking APIs] as BankAPI
+    [Credit Bureau APIs] as CreditAPI
+}
+
+' Frontend
+package "Frontend" {
+    [Web Application] as Web
+    [Mobile Application] as Mobile
+    [Admin Dashboard] as Admin
+}
+
+' Relationships with better spacing
+LB -[hidden]r-> CDN
+CDN -[hidden]r-> API
+API -[hidden]r-> Mesh
+
+LB --> API
+API --> Mesh
+
+Mesh --> UM
+Mesh --> Auth
+Mesh --> Authz
+Mesh --> TM
+Mesh --> CM
+Mesh --> TA
+Mesh --> SC
+Mesh --> SH
+Mesh --> RE
+Mesh --> DS
+Mesh --> RS
+Mesh --> NS
+
+UM --> UDB
+TM --> TDB
+DS --> ADB
+NS --> Cache
+
+UM --> Email
+UM --> SMS
+SC --> BankAPI
+SC --> CreditAPI
+
+Web --> API
+Mobile --> API
+Admin --> API
+
+@enduml 

@@ -1,0 +1,96 @@
+@startuml Credit Score System Class Diagram
+
+' Core Entities
+class User {
+    +id: UUID
+    +email: String
+    +password: String
+    +firstName: String
+    +lastName: String
+    +phoneNumber: String
+    +role: UserRole
+    +createdAt: DateTime
+    +updatedAt: DateTime
+    +calculateCreditScore()
+    +getTransactionHistory()
+}
+
+class Transaction {
+    +id: UUID
+    +userId: UUID
+    +amount: Decimal
+    +type: TransactionType
+    +category: Category
+    +description: String
+    +date: DateTime
+    +status: TransactionStatus
+    +createdAt: DateTime
+    +updatedAt: DateTime
+}
+
+class Category {
+    +id: UUID
+    +name: String
+    +type: CategoryType
+    +description: String
+    +icon: String
+    +createdAt: DateTime
+    +updatedAt: DateTime
+}
+
+class CreditScore {
+    +id: UUID
+    +userId: UUID
+    +score: Integer
+    +factors: Map<String, Float>
+    +calculationDate: DateTime
+    +validUntil: DateTime
+    +createdAt: DateTime
+    +updatedAt: DateTime
+    +calculateFactors()
+    +getRecommendations()
+}
+
+class TransactionAnalytics {
+    +id: UUID
+    +userId: UUID
+    +period: String
+    +totalIncome: Decimal
+    +totalExpenses: Decimal
+    +savingsRate: Float
+    +categoryBreakdown: Map<String, Decimal>
+    +createdAt: DateTime
+    +updatedAt: DateTime
+    +calculateMetrics()
+}
+
+enum TransactionType {
+    INCOME
+    EXPENSE
+}
+
+enum CategoryType {
+    INCOME
+    EXPENSE
+}
+
+enum UserRole {
+    ADMIN
+    USER
+}
+
+enum TransactionStatus {
+    PENDING
+    COMPLETED
+    FAILED
+    CANCELLED
+}
+
+' Relationships
+User "1" -- "*" Transaction
+User "1" -- "*" CreditScore
+User "1" -- "*" TransactionAnalytics
+Transaction "*" -- "1" Category
+Category "1" -- "*" Transaction
+
+@enduml 

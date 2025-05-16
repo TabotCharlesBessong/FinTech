@@ -1,0 +1,110 @@
+@startuml Credit Score System Use Cases
+
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+skinparam nodesep 100
+skinparam ranksep 150
+
+' Actors - Left Side
+actor "Regular User" as User
+actor "Banking Partner" as Bank
+
+' Actors - Right Side
+actor "Administrator" as Admin
+actor "Credit Bureau" as Bureau
+
+' Actors - Top
+actor "System" as System
+
+' Use Cases
+rectangle "Credit Score Tracking System" {
+    ' User Management - Left Side
+    usecase "Register Account" as UC1
+    usecase "Login" as UC2
+    usecase "Manage Profile" as UC3
+    usecase "Reset Password" as UC4
+
+    ' Transaction Management - Center Left
+    usecase "Add Transaction" as UC5
+    usecase "View Transactions" as UC6
+    usecase "Categorize Transactions" as UC7
+    usecase "Import Transactions" as UC8
+
+    ' Credit Score - Center Right
+    usecase "View Credit Score" as UC9
+    usecase "View Score History" as UC10
+    usecase "View Score Factors" as UC11
+    usecase "Get Improvement Tips" as UC12
+
+    ' Analytics - Right Side
+    usecase "View Dashboard" as UC13
+    usecase "Generate Reports" as UC14
+    usecase "View Trends" as UC15
+
+    ' Admin Functions - Bottom Right
+    usecase "Manage Users" as UC16
+    usecase "View System Analytics" as UC17
+    usecase "Configure System" as UC18
+
+    ' Banking Integration - Bottom Left
+    usecase "Verify Credit Score" as UC19
+    usecase "Process Loan Application" as UC20
+    usecase "Update Credit Data" as UC21
+}
+
+' User Relationships - Left Side
+User --> UC1
+User --> UC2
+User --> UC3
+User --> UC4
+User --> UC5
+User --> UC6
+User --> UC7
+User --> UC8
+User --> UC9
+User --> UC10
+User --> UC11
+User --> UC12
+User --> UC13
+User --> UC14
+User --> UC15
+
+' Admin Relationships - Right Side
+Admin --> UC16
+Admin --> UC17
+Admin --> UC18
+Admin --> UC6
+Admin --> UC13
+Admin --> UC14
+Admin --> UC15
+
+' Bank Relationships - Bottom Left
+Bank --> UC19
+Bank --> UC20
+Bank --> UC21
+
+' Bureau Relationships - Bottom Right
+Bureau --> UC21
+Bureau --> UC9
+Bureau --> UC10
+
+' System Relationships - Top
+System --> UC9
+System --> UC10
+System --> UC11
+System --> UC12
+System --> UC13
+System --> UC14
+System --> UC15
+
+' Include Relationships
+UC5 ..> UC7 : <<include>>
+UC9 ..> UC11 : <<include>>
+UC14 ..> UC15 : <<include>>
+
+' Extend Relationships
+UC2 <.. UC4 : <<extend>>
+UC9 <.. UC10 : <<extend>>
+UC13 <.. UC15 : <<extend>>
+
+@enduml 
