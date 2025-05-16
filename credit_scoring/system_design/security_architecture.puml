@@ -1,0 +1,135 @@
+@startuml Security Architecture
+
+skinparam componentStyle rectangle
+skinparam linetype ortho
+skinparam nodesep 80
+skinparam ranksep 100
+
+' Client Layer
+package "Client Layer" {
+    [Web Browser] as WB
+    [Mobile App] as MA
+}
+
+' Security Layer
+package "Security Layer" {
+    package "Authentication" {
+        [JWT Service] as JWT
+        [OAuth2 Service] as OAuth
+        [MFA Service] as MFA
+    }
+    
+    package "Authorization" {
+        [RBAC Service] as RBAC
+        [Policy Engine] as PE
+        [Access Control] as AC
+    }
+    
+    package "Security Monitoring" {
+        [WAF] as WAF
+        [IDS/IPS] as IDS
+        [Security Logging] as SL
+    }
+}
+
+' API Gateway Layer
+package "API Gateway Layer" {
+    [API Gateway] as APIG
+    [Rate Limiter] as RL
+    [Request Validator] as RV
+    [IP Filter] as IPF
+}
+
+' Service Layer
+package "Service Layer" {
+    [User Service] as US
+    [Transaction Service] as TS
+    [Credit Score Service] as CS
+}
+
+' Data Layer
+package "Data Layer" {
+    database "Encrypted Database" as DB
+    [Key Management] as KM
+    [Data Encryption] as DE
+}
+
+' External Services
+package "External Services" {
+    [Certificate Authority] as CA
+    [Security Scanner] as SS
+    [Audit Service] as AS
+}
+
+' Relationships
+WB --> WAF
+MA --> WAF
+
+WAF --> APIG
+IDS --> APIG
+SL --> APIG
+
+APIG --> RL
+APIG --> RV
+APIG --> IPF
+
+RL --> JWT
+RV --> JWT
+IPF --> JWT
+
+JWT --> OAuth
+JWT --> MFA
+JWT --> RBAC
+
+RBAC --> PE
+PE --> AC
+
+AC --> US
+AC --> TS
+AC --> CS
+
+US --> DB
+TS --> DB
+CS --> DB
+
+DB --> KM
+DB --> DE
+
+KM --> CA
+DE --> CA
+
+US --> AS
+TS --> AS
+CS --> AS
+
+AS --> SS
+
+note right of WAF
+  Web Application Firewall:
+  - SQL Injection Protection
+  - XSS Protection
+  - DDoS Protection
+end note
+
+note right of JWT
+  Authentication:
+  - Token-based Auth
+  - OAuth2 Integration
+  - Multi-factor Auth
+end note
+
+note right of RBAC
+  Authorization:
+  - Role-based Access
+  - Policy Enforcement
+  - Access Control Lists
+end note
+
+note right of DB
+  Data Protection:
+  - Encryption at Rest
+  - Encryption in Transit
+  - Key Management
+end note
+
+@enduml 

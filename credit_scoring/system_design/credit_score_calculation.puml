@@ -1,0 +1,35 @@
+@startuml Credit Score Calculation Process
+
+actor User
+participant "Transaction Service" as TS
+participant "Credit Score Service" as CS
+participant "Analytics Service" as AS
+participant "User Database" as UDB
+participant "Transaction Database" as TDB
+participant "Analytics Database" as ADB
+participant "Notification Service" as NS
+
+User -> TS: Add Transaction
+activate TS
+TS -> TDB: Store Transaction
+deactivate TS
+
+TS -> CS: Trigger Score Update
+activate CS
+
+CS -> TDB: Fetch Recent Transactions
+CS -> UDB: Fetch User Profile
+CS -> AS: Request Financial Analytics
+
+AS -> TDB: Analyze Transaction Patterns
+AS -> ADB: Store Analytics Results
+AS --> CS: Return Analytics
+
+CS -> CS: Calculate New Score
+CS -> ADB: Store Score History
+CS -> NS: Notify Score Update
+
+NS -> User: Send Score Update Notification
+deactivate CS
+
+@enduml 

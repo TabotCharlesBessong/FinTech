@@ -1,0 +1,58 @@
+@startuml User Registration Process
+
+actor User
+participant "Web Frontend" as Frontend
+participant "API Gateway" as Gateway
+participant "User Service" as UserService
+participant "Email Service" as EmailService
+participant "User Database" as UserDB
+participant "Cache" as Cache
+
+User -> Frontend: Fill Registration Form
+activate Frontend
+
+Frontend -> Frontend: Validate Form Data
+Frontend -> Gateway: POST /api/v1/users/register
+activate Gateway
+
+Gateway -> UserService: Forward Registration Request
+activate UserService
+
+UserService -> UserService: Validate User Data
+UserService -> UserDB: Check Email Exists
+activate UserDB
+UserDB --> UserService: Email Status
+deactivate UserDB
+
+alt Email Exists
+    UserService --> Gateway: Return Error
+    Gateway --> Frontend: Return Error
+    Frontend --> User: Show Error Message
+else Email Available
+    UserService -> UserService: Hash Password
+    UserService -> UserDB: Create User
+    activate UserDB
+    UserDB --> UserService: User Created
+    deactivate UserDB
+    
+    UserService -> UserService: Generate Verification Token
+    UserService -> Cache: Store Verification Token
+    activate Cache
+    Cache --> UserService: Token Stored
+    deactivate Cache
+    
+    UserService -> EmailService: Send Verification Email
+    activate EmailService
+    EmailService --> UserService: Email Sent
+    deactivate EmailService
+    
+    UserService --> Gateway: Return Success
+    Gateway --> Frontend: Return Success
+    Frontend --> User: Show Success Message
+end
+
+deactivate UserService
+deactivate Gateway
+deactivate Frontend
+
+@enduml 

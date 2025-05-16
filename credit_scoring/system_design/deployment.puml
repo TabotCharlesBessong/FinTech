@@ -1,0 +1,116 @@
+@startuml Credit Score System Deployment
+
+node "Client Layer" {
+    [Web Browser] as WB
+    [Mobile App] as MA
+}
+
+cloud "CDN" {
+    [CloudFront] as CF
+}
+
+node "Load Balancer Layer" {
+    [Application Load Balancer] as ALB
+}
+
+node "API Gateway Layer" {
+    [API Gateway] as APIG
+}
+
+node "Service Layer" {
+    node "User Service" {
+        [User Service Instance 1] as US1
+        [User Service Instance 2] as US2
+    }
+    
+    node "Transaction Service" {
+        [Transaction Service Instance 1] as TS1
+        [Transaction Service Instance 2] as TS2
+    }
+    
+    node "Credit Score Service" {
+        [Credit Score Service Instance 1] as CS1
+        [Credit Score Service Instance 2] as CS2
+    }
+    
+    node "Analytics Service" {
+        [Analytics Service Instance 1] as AS1
+        [Analytics Service Instance 2] as AS2
+    }
+}
+
+database "Data Layer" {
+    node "Primary Database" {
+        [User DB] as UDB
+        [Transaction DB] as TDB
+        [Analytics DB] as ADB
+    }
+    
+    node "Cache Layer" {
+        [Redis Cache] as RC
+    }
+    
+    node "Message Queue" {
+        [RabbitMQ] as MQ
+    }
+}
+
+node "Monitoring Layer" {
+    [Prometheus] as PM
+    [Grafana] as GF
+    [ELK Stack] as ELK
+}
+
+' Relationships
+WB --> CF
+MA --> CF
+CF --> ALB
+ALB --> APIG
+
+APIG --> US1
+APIG --> US2
+APIG --> TS1
+APIG --> TS2
+APIG --> CS1
+APIG --> CS2
+APIG --> AS1
+APIG --> AS2
+
+US1 --> UDB
+US2 --> UDB
+TS1 --> TDB
+TS2 --> TDB
+AS1 --> ADB
+AS2 --> ADB
+
+US1 --> RC
+US2 --> RC
+TS1 --> RC
+TS2 --> RC
+CS1 --> RC
+CS2 --> RC
+AS1 --> RC
+AS2 --> RC
+
+US1 --> MQ
+US2 --> MQ
+TS1 --> MQ
+TS2 --> MQ
+CS1 --> MQ
+CS2 --> MQ
+AS1 --> MQ
+AS2 --> MQ
+
+US1 --> PM
+US2 --> PM
+TS1 --> PM
+TS2 --> PM
+CS1 --> PM
+CS2 --> PM
+AS1 --> PM
+AS2 --> PM
+
+PM --> GF
+PM --> ELK
+
+@enduml 
