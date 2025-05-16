@@ -1,0 +1,56 @@
+@startuml Credit Score Calculation Activity
+
+start
+
+:User adds new transaction;
+
+if (Transaction Valid?) then (yes)
+    :Store Transaction;
+else (no)
+    :Return Error;
+    stop
+endif
+
+:Trigger Score Update;
+
+partition "Data Collection" {
+    :Fetch Recent Transactions;
+    :Fetch User Profile;
+    :Get Historical Scores;
+}
+
+partition "Analysis" {
+    :Calculate Income Metrics;
+    :Calculate Expense Metrics;
+    :Analyze Payment History;
+    :Calculate Debt-to-Income Ratio;
+    :Analyze Credit Utilization;
+}
+
+partition "Score Calculation" {
+    :Apply Income Weight (30%);
+    :Apply Expense Weight (25%);
+    :Apply Payment History Weight (20%);
+    :Apply Debt Ratio Weight (15%);
+    :Apply Credit Utilization Weight (10%);
+    
+    :Calculate Final Score;
+}
+
+partition "Post-Processing" {
+    :Store Score History;
+    :Generate Score Factors;
+    :Create Improvement Recommendations;
+}
+
+:Notify User;
+
+if (Score Changed?) then (yes)
+    :Send Score Update Notification;
+else (no)
+    :Skip Notification;
+endif
+
+stop
+
+@enduml 

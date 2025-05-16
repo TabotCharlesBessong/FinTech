@@ -1,0 +1,139 @@
+@startuml Load Balancing and Caching Architecture
+
+skinparam componentStyle rectangle
+skinparam linetype ortho
+skinparam nodesep 80
+skinparam ranksep 100
+
+' Client Layer
+package "Client Layer" {
+    [Web Browser] as WB
+    [Mobile App] as MA
+}
+
+' CDN Layer
+cloud "CDN Layer" {
+    [CloudFront Edge 1] as CF1
+    [CloudFront Edge 2] as CF2
+    [CloudFront Edge 3] as CF3
+}
+
+' Load Balancer Layer
+package "Load Balancer Layer" {
+    [Application Load Balancer] as ALB
+    [Health Check] as HC
+    [Auto Scaling Group] as ASG
+}
+
+' Service Layer with Caching
+package "Service Layer" {
+    package "User Service" {
+        [User Service Instance 1] as US1
+        [User Service Instance 2] as US2
+        [User Service Cache] as USC
+    }
+    
+    package "Transaction Service" {
+        [Transaction Service Instance 1] as TS1
+        [Transaction Service Instance 2] as TS2
+        [Transaction Service Cache] as TSC
+    }
+    
+    package "Credit Score Service" {
+        [Credit Score Service Instance 1] as CS1
+        [Credit Score Service Instance 2] as CS2
+        [Credit Score Service Cache] as CSC
+    }
+}
+
+' Cache Layer
+package "Cache Layer" {
+    database "Redis Cluster" {
+        [Redis Master] as RM
+        [Redis Replica 1] as RR1
+        [Redis Replica 2] as RR2
+    }
+    
+    database "Memcached Cluster" {
+        [Memcached Node 1] as MC1
+        [Memcached Node 2] as MC2
+        [Memcached Node 3] as MC3
+    }
+}
+
+' Database Layer
+database "Database Layer" {
+    [Primary DB] as PDB
+    [Read Replica 1] as RR1
+    [Read Replica 2] as RR2
+}
+
+' Relationships
+WB --> CF1
+WB --> CF2
+MA --> CF3
+
+CF1 --> ALB
+CF2 --> ALB
+CF3 --> ALB
+
+ALB --> HC
+ALB --> ASG
+
+ASG --> US1
+ASG --> US2
+ASG --> TS1
+ASG --> TS2
+ASG --> CS1
+ASG --> CS2
+
+US1 --> USC
+US2 --> USC
+TS1 --> TSC
+TS2 --> TSC
+CS1 --> CSC
+CS2 --> CSC
+
+USC --> RM
+TSC --> RM
+CSC --> RM
+
+RM --> RR1
+RM --> RR2
+
+USC --> MC1
+TSC --> MC2
+CSC --> MC3
+
+US1 --> PDB
+US2 --> PDB
+TS1 --> PDB
+TS2 --> PDB
+CS1 --> PDB
+CS2 --> PDB
+
+PDB --> RR1
+PDB --> RR2
+
+note right of ALB
+  Load Balancing Strategy:
+  - Round Robin
+  - Least Connections
+  - Session Persistence
+end note
+
+note right of RM
+  Cache Strategy:
+  - Write-through
+  - Read-through
+  - Cache-aside
+end note
+
+note right of PDB
+  Database Strategy:
+  - Master-Slave Replication
+  - Read Scaling
+  - Connection Pooling
+end note
+
+@enduml 
