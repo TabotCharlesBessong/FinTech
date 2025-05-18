@@ -1,4 +1,4 @@
-import { Category } from "src/models";
+import { Category } from "../models";
 
 export class CategoryService {
   static async create(data: any) {

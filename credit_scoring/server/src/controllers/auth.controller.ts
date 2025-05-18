@@ -31,7 +31,7 @@ export class AuthController {
       const token = jwt.sign(
         { id: user.id, email: user.email, role: user.role },
         process.env.JWT_SECRET!,
-        { expiresIn: '24h' }
+        { expiresIn: '7d' }
       );
 
       res.status(201).json({
@@ -72,7 +72,7 @@ export class AuthController {
       const token = jwt.sign(
         { id: user.id, email: user.email, role: user.role },
         process.env.JWT_SECRET!,
-        { expiresIn: '24h' }
+        { expiresIn: '7d' }
       );
 
       res.json({

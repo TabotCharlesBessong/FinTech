@@ -15,7 +15,7 @@ export class CategoryController {
     }
   }
 
-  static async getAll(req: Request, res: Response, next: NextFunction) {
+  static async getAll(_req: Request, res: Response, next: NextFunction) {
     try {
       // const { type } = req.query;
       const categories = await CategoryService.getAll();

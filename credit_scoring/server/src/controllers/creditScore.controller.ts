@@ -51,7 +51,7 @@ export class CreditScoreController {
 
   static async getFactors(req: Request, res: Response, next: NextFunction) {
     try {
-      const factors = await CreditScoreService.getFactors(req.user.id);
+      const factors = await CreditScoreService.getUserFactors(req.user.id);
       res.json({
         status: 'success',
         data: { factors },

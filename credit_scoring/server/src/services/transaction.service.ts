@@ -94,18 +94,18 @@ export class TransactionService {
 
     transactions.forEach((transaction) => {
       const amount = Number(transaction.amount);
-      const categoryName = transaction.category?.name || 'Uncategorized';
+      const categoryId = transaction.categoryId || 'Uncategorized';
 
-      if (!stats.byCategory[categoryName]) {
-        stats.byCategory[categoryName] = { income: 0, expense: 0 };
+      if (!stats.byCategory[categoryId]) {
+        stats.byCategory[categoryId] = { income: 0, expense: 0 };
       }
 
       if (transaction.type === 'income') {
         stats.totalIncome += amount;
-        stats.byCategory[categoryName].income += amount;
+        stats.byCategory[categoryId].income += amount;
       } else {
         stats.totalExpense += amount;
-        stats.byCategory[categoryName].expense += amount;
+        stats.byCategory[categoryId].expense += amount;
       }
     });
 

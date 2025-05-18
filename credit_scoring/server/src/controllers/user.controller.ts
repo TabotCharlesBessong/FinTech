@@ -64,7 +64,7 @@ export class UserController {
   }
 
   // Admin only routes
-  static async getAllUsers(req: Request, res: Response, next: NextFunction) {
+  static async getAllUsers(_req: Request, res: Response, next: NextFunction) {
     try {
       const users = await UserService.getAll();
       res.json({

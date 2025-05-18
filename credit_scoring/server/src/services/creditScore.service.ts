@@ -1,6 +1,8 @@
 import { CreditScore, Transaction, User } from '../models';
 import { CustomError } from '../utils/customError';
 import { Op } from 'sequelize';
+// import { CreditScoreAttributes } from '../models/CreditScore';
+// import { InferCreationAttributes, Model } from 'sequelize';
 
 interface PaginationParams {
   page?: number;
@@ -32,13 +34,15 @@ export class CreditScoreService {
     const factors = this.getFactors(transactions);
 
     // Create new credit score record
-    return CreditScore.create({
+    const creditScoreData = {
       userId,
       score,
       factors,
       calculationDate: new Date(),
       validUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // Valid for 30 days
-    });
+    };
+
+    return CreditScore.create(creditScoreData as any);
   }
 
   private static async calculateScore(transactions: Transaction[]) {
@@ -125,15 +129,15 @@ export class CreditScoreService {
     return Math.max(0, 100 - (recentTransactions * 10)); // Deduct 10 points per recent transaction
   }
 
-  // private static getFactors(transactions: Transaction[]) {
-  //   return {
-  //     paymentHistory: this.calculatePaymentHistory(transactions),
-  //     creditUtilization: this.calculateCreditUtilization(transactions),
-  //     creditHistory: this.calculateCreditHistory(transactions),
-  //     creditTypes: this.calculateCreditTypes(transactions),
-  //     recentInquiries: this.calculateRecentInquiries(transactions),
-  //   };
-  // }
+  private static getFactors(transactions: Transaction[]) {
+    return {
+      paymentHistory: this.calculatePaymentHistory(transactions),
+      creditUtilization: this.calculateCreditUtilization(transactions),
+      creditHistory: this.calculateCreditHistory(transactions),
+      creditTypes: this.calculateCreditTypes(transactions),
+      recentInquiries: this.calculateRecentInquiries(transactions),
+    };
+  }
 
   static async getHistory(params: { userId: string } & PaginationParams) {
     const { userId, page = 1, limit = 10 } = params;
@@ -164,7 +168,7 @@ export class CreditScoreService {
     });
   }
 
-  static async getFactors(userId: string) {
+  static async getUserFactors(userId: string) {
     const latestScore = await this.getLatest(userId);
     if (!latestScore) {
       throw new CustomError('No credit score found', 404, 'CREDIT_SCORE_NOT_FOUND');
