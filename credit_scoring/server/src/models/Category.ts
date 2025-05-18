@@ -1,11 +1,10 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../config/database';
-import { TransactionType } from './Transaction';
 
 export interface CategoryAttributes {
   id: string;
   name: string;
-  type: TransactionType;
+  type: 'income' | 'expense';
   description: string;
   icon: string;
   createdAt?: Date;
@@ -15,7 +14,7 @@ export interface CategoryAttributes {
 class Category extends Model<CategoryAttributes> implements CategoryAttributes {
   public id!: string;
   public name!: string;
-  public type!: TransactionType;
+  public type!: 'income' | 'expense';
   public description!: string;
   public icon!: string;
   public readonly createdAt!: Date;
@@ -27,37 +26,30 @@ Category.init(
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
-      primaryKey: true
+      primaryKey: true,
     },
     name: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.STRING,
       allowNull: false,
-      unique: true
     },
     type: {
-      type: DataTypes.ENUM(...Object.values(TransactionType)),
-      allowNull: false
+      type: DataTypes.ENUM('income', 'expense'),
+      allowNull: false,
     },
     description: {
-      type: DataTypes.TEXT,
-      allowNull: true
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     icon: {
-      type: DataTypes.STRING(50),
-      allowNull: true
-    }
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'default-icon',
+    },
   },
   {
     sequelize,
     modelName: 'Category',
-    indexes: [
-      {
-        fields: ['name']
-      },
-      {
-        fields: ['type']
-      }
-    ]
+    tableName: 'categories',
   }
 );
 
