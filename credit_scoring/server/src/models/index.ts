@@ -1,7 +1,7 @@
-import User from './User';
-import Transaction from './Transaction';
-import Category from './Category';
-import CreditScore from './CreditScore';
+import User, { UserAttributes, UserRole } from './User';
+import Transaction, { TransactionAttributes, TransactionType, TransactionStatus } from './Transaction';
+import Category, { CategoryAttributes } from './Category';
+import CreditScore, { CreditScoreAttributes } from './CreditScore';
 
 // User Associations
 User.hasMany(Transaction, {
@@ -37,7 +37,14 @@ CreditScore.belongsTo(User, {
 
 export {
   User,
+  UserAttributes,
+  UserRole,
   Transaction,
+  TransactionAttributes,
+  TransactionType,
+  TransactionStatus,
   Category,
-  CreditScore
+  CategoryAttributes,
+  CreditScore,
+  CreditScoreAttributes
 };
