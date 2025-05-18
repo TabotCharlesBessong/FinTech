@@ -1,5 +1,5 @@
-import { Transaction, User, Category } from '../models';
-import { Op } from 'sequelize';
+import { Transaction, User, Category, TransactionType, TransactionStatus } from '../models';
+import { faker } from '@faker-js/faker';
 
 export async function seedTransactions() {
   // Get users and categories
@@ -19,10 +19,11 @@ export async function seedTransactions() {
       transactions.push({
         userId: user.id,
         categoryId: category.id,
-        amount: Math.floor(Math.random() * 5000) + 1000,
-        type: 'income',
+        amount: faker.number.int({ min: 1000, max: 5000 }),
+        type: TransactionType.INCOME,
         description: `Monthly ${category.name.toLowerCase()} income`,
-        date: new Date(Date.now() - Math.floor(Math.random() * 30) * 24 * 60 * 60 * 1000),
+        transactionDate: faker.date.recent({ days: 30 }),
+        status: faker.helpers.arrayElement(Object.values(TransactionStatus)),
       });
     }
 
@@ -32,13 +33,14 @@ export async function seedTransactions() {
       transactions.push({
         userId: user.id,
         categoryId: category.id,
-        amount: Math.floor(Math.random() * 500) + 10,
-        type: 'expense',
+        amount: faker.number.int({ min: 10, max: 500 }),
+        type: TransactionType.EXPENSE,
         description: `${category.name.toLowerCase()} expense`,
-        date: new Date(Date.now() - Math.floor(Math.random() * 30) * 24 * 60 * 60 * 1000),
+        transactionDate: faker.date.recent({ days: 30 }),
+        status: faker.helpers.arrayElement(Object.values(TransactionStatus)),
       });
     }
   }
 
-  await Transaction.bulkCreate(transactions);
+  await Transaction.bulkCreate(transactions as any);
 } 

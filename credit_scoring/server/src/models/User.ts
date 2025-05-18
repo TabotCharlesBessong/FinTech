@@ -13,7 +13,7 @@ export interface UserAttributes {
   password: string;
   firstName: string;
   lastName: string;
-  phoneNumber: string;
+  phoneNumber?: string;
   role: UserRole;
   isVerified: boolean;
   createdAt?: Date;
@@ -66,7 +66,7 @@ User.init(
     },
     phoneNumber: {
       type: DataTypes.STRING,
-      allowNull: false
+      // allowNull: false
     },
     role: {
       type: DataTypes.ENUM(...Object.values(UserRole)),
