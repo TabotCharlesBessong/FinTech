@@ -1,5 +1,6 @@
-import { User } from '../models';
+import { User, UserRole } from '../models';
 import bcrypt from 'bcryptjs';
+import { faker } from '@faker-js/faker';
 
 export async function seedUsers() {
   const users = [
@@ -8,30 +9,33 @@ export async function seedUsers() {
       password: await bcrypt.hash('admin123', 10),
       firstName: 'Admin',
       lastName: 'User',
-      role: 'admin',
+      phoneNumber: faker.phone.number(),
+      role: UserRole.ADMIN,
+      isVerified: true,
     },
     {
       email: 'user@example.com',
       password: await bcrypt.hash('user123', 10),
       firstName: 'Regular',
       lastName: 'User',
-      role: 'user',
-    },
-    {
-      email: 'john@example.com',
-      password: await bcrypt.hash('john123', 10),
-      firstName: 'John',
-      lastName: 'Doe',
-      role: 'user',
-    },
-    {
-      email: 'jane@example.com',
-      password: await bcrypt.hash('jane123', 10),
-      firstName: 'Jane',
-      lastName: 'Smith',
-      role: 'user',
+      phoneNumber: faker.phone.number(),
+      role: UserRole.ADMIN,
+      isVerified: true,
     },
   ];
 
-  await User.bulkCreate(users);
+  // Generate 10 random users
+  for (let i = 0; i < 10; i++) {
+    users.push({
+      email: faker.internet.email(),
+      password: await bcrypt.hash(faker.internet.password(), 10),
+      firstName: faker.person.firstName(),
+      lastName: faker.person.lastName(),
+      phoneNumber: faker.phone.number(),
+      role: UserRole.USER,
+      isVerified: faker.datatype.boolean(),
+    });
+  }
+
+  await User.bulkCreate(users as any);
 } 
