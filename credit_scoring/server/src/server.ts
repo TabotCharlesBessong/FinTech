@@ -1,11 +1,13 @@
-import app from './app';
+// import app from './app';
 import sequelize from './config/database';
 import redisClient from './config/redis';
 import dotenv from 'dotenv';
+import express from "express"
 
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
+const app = express()
 
 async function startServer() {
   try {
