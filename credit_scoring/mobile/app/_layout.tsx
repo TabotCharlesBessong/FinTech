@@ -9,22 +9,22 @@ export default function RootLayout() {
     <Stack
       screenOptions={{
         headerStyle: {
-          backgroundColor: colorScheme === 'dark' ? '#000' : '#fff',
+          backgroundColor: colorScheme === "dark" ? "#000" : "#fff",
         },
-        headerTintColor: colorScheme === 'dark' ? '#fff' : '#000',
+        headerTintColor: colorScheme === "dark" ? "#fff" : "#000",
         headerTitleStyle: {
-          fontWeight: 'bold',
+          fontWeight: "bold",
         },
       }}
     >
       <Stack.Screen
-        name="(auth)"
+        name="(app)"
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
-        name="(app)"
+        name="(auth)"
         options={{
           headerShown: false,
         }}
