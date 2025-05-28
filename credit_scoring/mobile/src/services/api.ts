@@ -2,7 +2,7 @@ import axios from 'axios';
 import { store } from '../store';
 import { logout } from '../store/slices/authSlice';
 
-const BASE_URL = 'http://localhost:3000/api'; // Update with your backend URL
+const BASE_URL = 'http://192.168.0.178:3000/api'; // Update with your backend URL
 
 export const api = axios.create({
   baseURL: BASE_URL,
