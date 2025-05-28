@@ -1,6 +1,6 @@
 import app from './app';
 import sequelize from './config/database';
-// import redisClient from './config/redis';
+// import { connectRedis } from './config/redis';
 import dotenv from 'dotenv';
 // import express from "express"
 
@@ -15,6 +15,9 @@ async function startServer() {
     await sequelize.authenticate();
     await sequelize.sync();
     console.log('Database connected and models synchronized.');
+
+    // Connect to Redis
+    // await connectRedis();
 
     // Start Express server
     const server = app.listen(PORT, () => {
@@ -75,4 +78,4 @@ async function startServer() {
   }
 }
 
-startServer(); 
+startServer();

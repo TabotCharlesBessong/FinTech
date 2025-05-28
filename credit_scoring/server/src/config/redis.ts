@@ -18,34 +18,26 @@ const redisClient = createClient({
   },
 });
 
-// Error handling
+// Event listeners
 redisClient.on('error', (err) => {
   console.error('Redis Client Error:', err);
-  // Attempt to reconnect on error
-  if (!redisClient.isOpen) {
-    redisClient.connect().catch(console.error);
-  }
 });
-
 redisClient.on('connect', () => console.log('Redis Client Connected'));
 redisClient.on('ready', () => console.log('Redis Client Ready'));
 redisClient.on('reconnecting', () => console.log('Redis Client Reconnecting'));
 redisClient.on('end', () => console.log('Redis Client Connection Ended'));
 
-// Connect to Redis
-const connectRedis = async () => {
-  try {
-    if (!redisClient.isOpen) {
+// Export a function to connect (call this in server.ts before starting the server)
+export const connectRedis = async () => {
+  if (!redisClient.isOpen) {
+    try {
       await redisClient.connect();
+      console.log('Redis connection established.');
+    } catch (error) {
+      console.error('Failed to connect to Redis:', error);
+      // Optionally retry or exit process
     }
-  } catch (error) {
-    console.error('Failed to connect to Redis:', error);
-    // Retry connection after 5 seconds
-    setTimeout(connectRedis, 5000);
   }
 };
-
-// Initial connection
-connectRedis();
 
 export default redisClient;

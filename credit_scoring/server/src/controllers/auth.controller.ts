@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
+// import bcrypt from 'bcryptjs';
 import { UserService } from '../services/user.service';
 import { CustomError } from '../utils/customError';
 
@@ -15,13 +15,10 @@ export class AuthController {
         throw new CustomError('Email already registered', 400, 'EMAIL_EXISTS');
       }
 
-      // Hash password
-      const hashedPassword = await bcrypt.hash(password, 10);
-
-      // Create user
+      // Create user (password will be hashed by User model hooks)
       const user = await UserService.create({
         email,
-        password: hashedPassword,
+        password,
         firstName,
         lastName,
         role,
@@ -62,8 +59,8 @@ export class AuthController {
         throw new CustomError('Invalid credentials', 401, 'INVALID_CREDENTIALS');
       }
 
-      // Check password
-      const isValidPassword = await bcrypt.compare(password, user.password);
+      // Check password using the User model's comparePassword method
+      const isValidPassword = await user.comparePassword(password);
       if (!isValidPassword) {
         throw new CustomError('Invalid credentials', 401, 'INVALID_CREDENTIALS');
       }
